@@ -31,12 +31,12 @@ class MainActivity : AppCompatActivity(), ImageCallback {
 		}
 
 		selectImage.setOnClickListener {
-			openImagePicker()
+			openImageSelector()
 		}
 
 	}
 
-	private fun openImagePicker() {
+	private fun openImageSelector() {
 		imagePicker.selectImage(this, this)
 	}
 
