@@ -28,7 +28,7 @@ Add the following dependency in the dependencies block:
 dependencies {
     // other dependencies
 
-    implementation 'com.github.NkrumahNath:Camlytical:1.0.0'
+    implementation 'com.github.NightingaleNath:Camlytical:<latest-version>'
 }
 ```
 
