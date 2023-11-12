@@ -29,7 +29,9 @@ class MainActivity : AppCompatActivity(), ImageCallback {
 		imageView = findViewById(R.id.imageView)
 
 		captureButton.setOnClickListener {
-			handGestureLibrary?.handGestureCamera { categoryName ->
+			val validCategories = listOf("Open_Palm", "Thumb_Up", "Closed_Fist")
+
+			handGestureLibrary?.handGestureCamera(captureDelaySeconds = 2000L, validCategories) { categoryName ->
 				if (categoryName != null) {
 					showToast(categoryName)
 					Log.e("TAG", "categoryName $categoryName")

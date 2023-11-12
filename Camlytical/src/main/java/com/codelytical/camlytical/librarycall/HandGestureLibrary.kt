@@ -8,11 +8,15 @@ class HandGestureLibrary(private val activity: Activity) {
     private var callback: ((String?) -> Unit)? = null
 
     fun handGestureCamera(
+        captureDelaySeconds: Long,
+        validCategories: List<String>,
         callback: (String?) -> Unit
     ) {
         this.callback = callback
 
         val intent = Intent(activity, HandGestureActivity::class.java)
+        intent.putExtra("captureDelaySeconds", captureDelaySeconds)
+        intent.putStringArrayListExtra("validCategories", ArrayList(validCategories))
         activity.startActivityForResult(intent, GESTURE_CAMERA_REQUEST_CODE)
     }
 

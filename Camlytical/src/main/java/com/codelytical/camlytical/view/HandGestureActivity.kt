@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,6 +37,9 @@ class HandGestureActivity : AppCompatActivity(),
     GestureRecognizerHelper.GestureRecognizerListener {
 
     private lateinit var binding: ActivityHandGestureBinding
+    private val captureHandler = Handler(Looper.getMainLooper())
+    private var captureDelaySeconds: Long = 2000L
+    var receivedStringList: ArrayList<String> = ArrayList()
 
     private lateinit var gestureRecognizerHelper: GestureRecognizerHelper
     private lateinit var viewModel: MainViewModel
@@ -86,6 +90,14 @@ class HandGestureActivity : AppCompatActivity(),
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+        val extras = intent.extras
+        if (extras != null && extras.containsKey("captureDelaySeconds")) {
+            captureDelaySeconds = extras.getLong("captureDelaySeconds")
+        }
+        if (extras != null && extras.containsKey("validCategories")) {
+            receivedStringList = intent.getStringArrayListExtra("validCategories") ?: ArrayList()
+        }
 
         if (!hasPermissions(this)) {
             requestPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -234,12 +246,9 @@ class HandGestureActivity : AppCompatActivity(),
     override fun onError(error: String, errorCode: Int) {
         runOnUiThread {
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-//            gestureRecognizerResultAdapter.updateResults(emptyList())
 
             if (errorCode == GestureRecognizerHelper.GPU_ERROR) {
-//                fragmentCameraBinding.bottomSheetLayout.spinnerDelegate.setSelection(
-//                    GestureRecognizerHelper.DELEGATE_CPU, false
-//                )
+
                 GestureRecognizerHelper.DELEGATE_CPU
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
@@ -272,14 +281,14 @@ class HandGestureActivity : AppCompatActivity(),
                 }
                 binding.scoreValue.text = firstGestureCategory[0].score().toString()
 
-                if (categoryName == "Open_Palm" || categoryName == "Thumb_Up" || categoryName == "Closed_Fist") {
+                if (receivedStringList.contains(categoryName)) {
                     // Post a delayed action to finish the MainActivity after 2000 milliseconds (2 seconds)
-                    Handler().postDelayed({
+                    captureHandler.postDelayed({
                         val resultIntent = Intent()
                         resultIntent.putExtra("gestureCategory", categoryName)
                         setResult(Activity.RESULT_OK, resultIntent)
                         finish()
-                    }, 2000)
+                    }, captureDelaySeconds)
                 } else {
                     // Handle other gestures or update UI as needed
                     Log.d(TAG, "onResults: Gesture was $categoryName")
