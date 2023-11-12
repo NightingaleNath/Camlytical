@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Surface
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -197,7 +198,7 @@ class HandGestureActivity : AppCompatActivity(),
 
         // Preview. Only using the 4:3 ratio because this is the closest to our models
         preview = Preview.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3)
-            .setTargetRotation(binding.viewFinder.display.rotation)
+            .setTargetRotation(binding.viewFinder.display?.rotation ?: Surface.ROTATION_0)
             .build()
 
         // ImageAnalysis. Using RGBA 8888 to match how our models work
