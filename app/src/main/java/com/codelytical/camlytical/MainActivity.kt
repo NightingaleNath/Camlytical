@@ -12,8 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import com.codelytical.camlytical.librarycall.GESTURE_CAMERA_REQUEST_CODE
 import com.codelytical.camlytical.librarycall.HandGestureLibrary
 
-class MainActivity : AppCompatActivity(), ImageCallback {
-	private val imagePicker: ImagePicker = ImagePickerImpl()
+class MainActivity : AppCompatActivity() {
 	private lateinit var imageView: ImageView
 	private var handGestureLibrary: HandGestureLibrary? = null
 
@@ -41,31 +40,10 @@ class MainActivity : AppCompatActivity(), ImageCallback {
 			}
 
 		}
-
-		pickImageButton.setOnClickListener {
-			pickImage()
-		}
-
-		selectImage.setOnClickListener {
-			openImageSelector()
-		}
-
 	}
 
 	private fun showToast(message: String) {
 		Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-	}
-
-	private fun openImageSelector() {
-		imagePicker.selectImage(this, this)
-	}
-
-	private fun capturePhoto() {
-		imagePicker.capturePhoto(this, this)
-	}
-
-	private fun pickImage() {
-		imagePicker.pickImage(this, this)
 	}
 
 	@Deprecated("Deprecated in Java")
@@ -74,15 +52,8 @@ class MainActivity : AppCompatActivity(), ImageCallback {
 		if (requestCode == GESTURE_CAMERA_REQUEST_CODE) {
 			handGestureLibrary?.handleHandDetectedResult(resultCode, data)
 		}
-		imagePicker.handleActivityResult(requestCode, resultCode, data)
+		//imagePicker.handleActivityResult(requestCode, resultCode, data)
 	}
 
-	override fun onImageCaptured(imageUri: Uri) {
-		imageView.setImageURI(imageUri)
-	}
-
-	override fun onImagePickCancelled() {
-		Toast.makeText(this, "Image capture or pick cancelled", Toast.LENGTH_SHORT).show()
-	}
 
 }
