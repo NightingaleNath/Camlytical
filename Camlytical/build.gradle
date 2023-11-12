@@ -71,7 +71,7 @@ publishing {
         release(MavenPublication) {
             groupId = 'com.codelytical'
             artifactId = 'camlytical'
-            version = '1.0.3'
+            version = '1.0.4'
 
             afterEvaluate {
                 from components.release

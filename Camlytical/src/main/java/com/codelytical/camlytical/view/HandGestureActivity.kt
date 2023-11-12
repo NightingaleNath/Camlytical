@@ -204,7 +204,7 @@ class HandGestureActivity : AppCompatActivity(),
         // ImageAnalysis. Using RGBA 8888 to match how our models work
         imageAnalyzer =
             ImageAnalysis.Builder().setTargetAspectRatio(AspectRatio.RATIO_4_3)
-                .setTargetRotation(binding.viewFinder.display.rotation)
+                .setTargetRotation(binding.viewFinder.display?.rotation ?: Surface.ROTATION_0)
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
                 .build()
@@ -241,7 +241,7 @@ class HandGestureActivity : AppCompatActivity(),
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         imageAnalyzer?.targetRotation =
-            binding.viewFinder.display.rotation
+            binding.viewFinder.display?.rotation ?: Surface.ROTATION_0
     }
 
     override fun onError(error: String, errorCode: Int) {
